@@ -1,0 +1,13 @@
+#alert-div {
+  border-radius: 0px;
+  border-left: 3px solid #5cb85c;
+  background-color: #f5f6f7;
+}
+
+#term {
+  padding: 10px;
+}
+
+#table-sinatories tr {
+  cursor: pointer;
+}

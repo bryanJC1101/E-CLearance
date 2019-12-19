@@ -1,0 +1,40 @@
+<app-header></app-header>
+<div class="page-container">
+ 
+  <div class="page-content-wrapper">
+ 
+    <div class="content" id="content">
+
+      <div class="bg-white">
+        <div class="container">
+          <ol class="breadcrumb breadcrumb-alt">
+            <li class="breadcrumb-item">
+              <a href="javascript:;" class="capitalize">{{userType}}</a>
+            </li>
+            <li class="breadcrumb-item active capitalize">
+              {{moduleName}}
+            </li>
+            <li class="breadcrumb-item active capitalize" *ngIf="paramsName !== null">
+              {{paramsName}}
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="container sm-padding-10 p-t-20 p-l-0 p-r-0">
+        <router-outlet></router-outlet>
+      </div>
+
+      <div class="container footer" id="footer">
+        <p class="small no-margin pull-left sm-pull-reset">
+          <span class="hint-text">Copyright &copy; 2018 </span>
+          <span class="font-montserrat">BayangYang</span>
+          <span class="sm-block">
+            <a href="javascript:;" class="m-l-10 m-r-10">All rights reserved.</a>
+          </span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

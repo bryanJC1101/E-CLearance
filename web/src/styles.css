@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+.capitalize {
+  text-transform: capitalize !important;
+}
+
+.uppercase {
+  text-transform: uppercase !important;
+}
+
+.combobox-container .typeahead li {
+  width: 300px !important;
+}
+
+.input-search {
+  height: 40px;
+}
+
+.header-border {
+  border-radius: 0px;
+  border-top: 4px solid #26c9ff;
+}
+
+#alert-div {
+  border-radius: 0px;
+  border-left: 3px solid #5cb85c;
+  background-color: #f5f6f7;
+}

@@ -1,0 +1,317 @@
+<app-admin-content-loading *ngIf="isPageShow; else elsePageShow"></app-admin-content-loading>
+
+<ng-template #elsePageShow>
+  <!-- Print Here -->
+  <div class="hide" id="printClearance">
+    <table class="table table-bordered">
+      <tr>
+        <td>
+          <strong style="font-size:20px; font-family: times new roman; ">ACLC COLLEGE OF BUTUAN </strong>
+          <p style="font-size:10px; margin-top: -5px;">
+            Franchised and Operated by Butuan Information Technology Services Inc.<br>
+            <span style="margin-top:-5px !important; position: absolute;">HDS Bldg. 999 JC Aquino Avenue Butuan City.</span>
+          </p>
+          <img src="/assets/images/logo/AMA_logo.png" width="80" class="pull-right" style="margin-top: -58px;">
+        </td>
+      </tr>
+    </table>
+    <br>
+
+    <h4 class="text-center"><strong>Certificate of Clearance</strong></h4>
+
+    <br>
+    <strong>EMPLOYEE INFORMATION :</strong>
+    <table class="table table-bordered">
+      <tr>
+        <td style="width:20%">Name <span class="pull-right">:</span></td>
+        <td style="width:35%">{{credentials?.employee.fullname}}</td>
+        <td>Date <span class="pull-right">:</span></td>
+        <td>{{credentials?.request.requestDate | date}}</td>
+      </tr>
+      <tr>
+        <td>Department <span class="pull-right">:</span></td>
+        <td>{{credentials?.employee.department}}</td>
+        <td>Employe No. <span class="pull-right">:</span></td>
+        <td>{{credentials?.employee.empId}}</td>
+      </tr>
+      <tr>
+        <td>Date Hired <span class="pull-right">:</span></td>
+        <td>{{credentials?.employee.dateHired | date}}</td>
+        <td>Date End. <span class="pull-right">:</span></td>
+        <td>
+          <ng-container *ngIf="credentials?.clearanceStatus; else elseDateStat">
+            {{credentials?.clearanceStatus.reqStatDate | date}}
+          </ng-container>
+          <ng-template #elseDateStat>
+            ----
+          </ng-template>
+        </td>
+      </tr>
+      <tr>
+        <td>Address. <span class="pull-right">:</span></td>
+        <td>{{credentials?.employee.address}}</td>
+        <td>Contact No. <span class="pull-right">:</span></td>
+        <td>{{credentials?.employee.phone}}</td>
+      </tr>
+    </table>
+    <br>
+    <strong>
+      CLEARANCE INFORMATION & STATUS
+    </strong>
+    <table class="table table-bordered">
+      <thead>
+        <tr class="active" id="table-header">
+          <th style="width:35%; font-size:12px; text-align: left">DEPARTMENT</th>
+          <th style="width:30% ; font-size:12px; text-align: left">SIGNATORY</th>
+          <th style="width:18% ; font-size:12px; text-align: left">DATE</th>
+          <th style="text-align: center">
+            <small>
+              status
+            </small>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let signatory of credentials?.signatories">
+          <td>
+            <strong> {{signatory.deptName}}</strong>
+            <ul class="ul-req">
+              <li *ngFor="let req of signatory.requirements" style="margin-left:-40px;">
+                <small class="text-default ">
+                  <i class="fa fa-check"></i>
+                  {{req.requireName}}
+                </small>
+              </li>
+            </ul>
+          </td>
+          <td>{{signatory.signaName}}</td>
+          <td>
+            <span *ngIf="signatory.signaStat.clearedDate !== null; else elseStatDate">
+              {{signatory.signaStat.clearedDate | date}}
+            </span>
+            <ng-template #elseStatDate>
+              ---
+            </ng-template>
+          </td>
+          <td style="text-align:center">
+            <p class="m-t-10" *ngIf="signatory.signaStat.status === 'pending'; else elseStatusTemp">
+              <label class="label label-danger capitalize">{{signatory.signaStat.status}}</label>
+            </p>
+            <ng-template #elseStatusTemp>
+              <label class="label label-success label-sm capitalize">
+                {{signatory.signaStat.status}}
+              </label>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br>
+    <p style="font-size:12px;">
+      I hereby authorized the ACLC COLLEGE OF BUTUAN to deduct from my salary and remuneration any or all money/accountabilities
+      due as enumerated.
+    </p>
+    <br>
+    <br>
+
+    <strong class="pull-right" style="border-top:1px solid #000;">
+      Employee's Signature Over Printed Name/Date
+    </strong>
+  </div>
+
+  <div class="row">
+    <!-- Request Navigation Here -->
+    <div class="col-md-3">
+      <div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch">
+        <div class="card-header top-right">
+          <div class="card-controls">
+            <ul>
+              <li>
+                <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+                  <i class="portlet-icon portlet-icon-refresh"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="padding-15">
+          <div class="pull-left">
+            <h5 class="text-success no-margin">
+              <i class="fa fa-map-marker"></i>
+              Tracking
+            </h5>
+            <p>Track all type request.</p>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="input-group transparent">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" placeholder="Search Requestor" class="form-control" [(ngModel)]="searcReq">
+        </div>
+        <div class="auto-overflow widget-11-2-table">
+          <table class="table table-condensed table-hover" id="table-requestor">
+            <tbody>
+              <tr id="{{employee.requestId}}" (click)="onGetRequestor(employee.requestId)" *ngFor="let employee of employees | filter:searcReq">
+                <td class="font-montserrat all-caps fs-12 w-50">
+                  <strong> {{employee.employee}}</strong>
+                  <p><small>{{employee.clrName}}</small></p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="padding-25 mt-auto">
+          <p class="small no-margin">
+            <a href="#">
+              <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+            </a>
+            <span class="hint-text ">Show more details of E-Clearance . Inc</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Here -->
+    <div class="col-md-9 ">
+      <div class="row">
+        <div class="col-md-12 ">
+          <app-admin-content-header></app-admin-content-header>
+        </div>
+        <div class="col-md-12 ">
+          <span class="label label-warning" id="loading" *ngIf="loadingShow">Loading...</span>
+
+          <div class="card card-transparent">
+            <div class="card-block no-padding">
+              <div id="card-advance" class="card card-default">
+                <div class="card-header  ">
+                  <div class="card-title">Clearance Content
+                  </div>
+                  <div class="card-controls"></div>
+                </div>
+                <div class="card-block">
+                  <div class="row">
+                    <div class="col-md-8" *ngIf="isContentShow; else contentShow">
+                      <div class="alert alert-white" role="alert" id="alert-div">
+                        <p>
+                          <strong>Info!</strong>
+                        </p>
+                        <p class="mb-0">View <strong>
+                            <i>Requestor Request</i>
+                          </strong> by clicking the request list.</p>
+                      </div>
+                    </div>
+                    <ng-template #contentShow>
+                      <div class="col-md-12">
+                        <strong>
+                          EMPLOYEE INFORMATION :
+                          <label class="label label-success" *ngIf="credentials?.clearanceStatus !== null">
+                            CLEARED
+                            <i class="fa fa-check"></i>
+                          </label>
+                          <a href="javascript:;" style="font-size: 20px; margin-left: 5px;" *ngIf="credentials?.clearanceStatus !== null" title="Print Clearance."
+                            (click)="onPrintClearance()">
+                            <i class="pg-printer text-complete"></i>
+                          </a>
+                        </strong>
+                        <table class="table table-condensed table-bordered">
+                          <tr>
+                            <td style="width:20%">Name <span class="pull-right">:</span></td>
+                            <td style="width:35%">{{credentials?.employee.fullname}}</td>
+                            <td>Date <span class="pull-right">:</span></td>
+                            <td>{{credentials?.request.requestDate | date}}</td>
+                          </tr>
+                          <tr>
+                            <td>Department <span class="pull-right">:</span></td>
+                            <td>{{credentials?.employee.department}}</td>
+                            <td>Employe No. <span class="pull-right">:</span></td>
+                            <td>{{credentials?.employee.empId}}</td>
+                          </tr>
+                          <tr>
+                            <td>Date Hired <span class="pull-right">:</span></td>
+                            <td>{{credentials?.employee.dateHired | date}}</td>
+                            <td>Date End. <span class="pull-right">:</span></td>
+                            <td>
+                              <ng-container *ngIf="credentials?.clearanceStatus; else elseDateStat">
+                                {{credentials?.clearanceStatus.reqStatDate | date}}
+                              </ng-container>
+                              <ng-template #elseDateStat>
+                                ----
+                              </ng-template>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Address. <span class="pull-right">:</span></td>
+                            <td>{{credentials?.employee.address}}</td>
+                            <td>Contact No. <span class="pull-right">:</span></td>
+                            <td>{{credentials?.employee.phone}}</td>
+                          </tr>
+                        </table>
+                        <br>
+                        <strong>
+                          CLEARANCE INFORMATION & STATUS
+                        </strong>
+                        <table class="table table-condensed table-bordered table-active">
+                          <thead>
+                            <tr>
+                              <th style="width:35%; font-size:12px;" class="bold text-black">DEPARTMENT</th>
+                              <th style="width:30% ; font-size:12px;" class="bold text-black">SIGNATORY</th>
+                              <th style="width:18% ; font-size:12px;" class="bold text-black">DATE</th>
+                              <th style="text-align: center">
+                                <small class="text-black">
+                                  act./status
+                                </small>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let signatory of credentials?.signatories">
+                              <td>
+                                <strong> {{signatory.deptName}}</strong>
+                                <ul class="ul-req">
+                                  <li *ngFor="let req of signatory.requirements" style="margin-left:-40px;">
+                                    <small class="text-default">
+                                      <i class="fa fa-check"></i>
+                                      {{req.requireName}}
+                                    </small>
+                                  </li>
+                                </ul>
+                              </td>
+                              <td>{{signatory.signaName}}</td>
+                              <td>
+                                <span *ngIf="signatory.signaStat.clearedDate !== null; else elseStatDate">
+                                  {{signatory.signaStat.clearedDate | date}}
+                                </span>
+                                <ng-template #elseStatDate>
+                                  ---
+                                </ng-template>
+                              </td>
+                              <td style="text-align:center">
+                                <p class="m-t-10" *ngIf="signatory.signaStat.status === 'pending'; else elseStatusTemp">
+                                  <label class="label label-danger capitalize">{{signatory.signaStat.status}}</label>
+                                </p>
+                                <ng-template #elseStatusTemp>
+                                  <label class="label label-success label-sm capitalize">
+                                    {{signatory.signaStat.status}}
+                                  </label>
+                                </ng-template>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template>

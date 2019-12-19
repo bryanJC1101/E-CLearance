@@ -1,0 +1,67 @@
+<label class="label label-warning" id="loading-div" *ngIf="isPageShow; else elsePageShow">
+  Loading...
+</label>
+<ng-template #elsePageShow>
+
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 col-sm-3 col-xs-3">
+      <app-msg-nav></app-msg-nav>
+    </div>
+    <div class="col-md-9 col-sm-9 col-xs-9">
+      <div class="card card-default" style="margin-left: -14px !important; margin-top: -1px;">
+        <div class="card-header ">
+          <div class="card-title">SENT Message
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="auto-overflow widget-11-2-table">
+            <form id="deleteMsgForm">
+              <table class="table table-hover table-condensed " id="condensedTable">
+                <thead id="msgThead">
+                  <tr class="bg-master-light">
+                    <th colspan="3">
+                      <input type="checkbox" id="checkAll" (click)="checkAll()">&nbsp; &nbsp;
+                      <button id="btnDeleteMsg" class="btn btn-danger btn-xs" (click)="onDeleteMessage()" disabled>DELETE</button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="msgContent">
+                  <tr id="{{sent.sentId}}" *ngFor="let sent of sents | paginate: { itemsPerPage:8, currentPage: p }">
+                    <td>
+                      <input type="checkbox" name="message" value="{{sent.msgId}}" (click)="onSelectRow(sent.sentId, $event)" class="msgCheckbox"
+                        style="margin-top: 5px;">&nbsp;
+                      <strong>To : </strong>
+                      <span>{{sent.To}}</span>
+                    </td>
+                    <td class="v-align-middle semi-bold">{{sent.message}}</td>
+                    <td class="v-align-middle semi-bold text-right">{{sent.date | date : "M/d/yy"}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+            <div class="pull-right" style="margin:8px;">
+              <pagination-controls (pageChange)="p=$event"></pagination-controls>
+            </div>
+          </div>
+
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,368 @@
+<app-admin-content-loading *ngIf="pageShow; else elseContent"></app-admin-content-loading>
+
+<ng-template #elseContent>
+
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch">
+        <div class="card-header top-right">
+          <div class="card-controls">
+            <ul>
+              <li>
+                <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+                  <i class="portlet-icon portlet-icon-refresh"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="padding-15">
+          <div class="pull-left">
+            <h5 class="text-success no-margin">
+              <i class="fa fa-files-o"></i>
+              CLEARANCES
+            </h5>
+            <p class="no-margin">Clearance Created & Updated.</p>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="input-group transparent">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" placeholder="Search Clearance" class="form-control" [(ngModel)]="searchClear">
+        </div>
+        <div class="auto-overflow widget-11-2-table">
+          <table class="table table-condensed table-hover" id="table-clearance">
+            <tbody>
+              <tr id="{{clearance.clearId}}" (click)="onGetClearance(clearance.clearId)" *ngFor="let clearance of items.clearances | filter:searchClear">
+                <td class="font-montserrat all-caps fs-12 w-50">
+                  {{clearance.clearName}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="padding-25 mt-auto">
+          <p class="small no-margin">
+            <a href="#">
+              <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+            </a>
+            <span class="hint-text ">Show more details of E-Clearance . Inc</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 ">
+      <div class="row">
+        <div class="col-md-12 ">
+          <app-admin-content-header></app-admin-content-header>
+        </div>
+        <div class="col-md-12 ">
+
+          <label class="label label-warning" id="loading" *ngIf="loadingShow">Loading...</label>
+
+          <div class="card card-transparent">
+            <div class="card-block no-padding">
+              <div id="card-advance" class="card card-default">
+                <div class="card-header  ">
+                  <div class="card-title">
+                    CLEARANCE CONTENT &nbsp;
+                    <a href="javascrip:;" *ngIf="formShow;  else backShow " (click)="onBtnNew()" title="New Clearance">
+                      <i class="fa  fa-plus-square fa-2x "></i>
+                    </a>
+                    <ng-template #backShow>
+                      <a href="javascrip:;" (click)="onbtnBack()" title="Back?">
+                        <i class="fa  fa-arrow-circle-left fa-2x"></i>
+                      </a>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="card-block" *ngIf="contentShow; else elseContentShow">
+                  <div class="row">
+                    <div class="col-md-8" *ngIf="formShow; else elseFormContent">
+                      <div class="alert alert-white" role="alert" id="alert-div">
+                        <p>
+                          <strong>Info!</strong>
+                        </p>
+                        <p class="mb-0">Create <strong>
+                            <i> CLEARANCE</i>
+                          </strong> by clicking the signatory button.</p>
+                      </div>
+                    </div>
+                    <ng-template #elseFormContent>
+                      <button class="btn btn-danger btn-xs" (click)="onCancelForClearance()" id="cancelFormClearance">
+                        CANCEL
+                      </button>
+                      <div class="col-md-4">
+                        <form #clearForm="ngForm" (ngSubmit)="onCreateClearance(clearForm)">
+                          <h6>Form:</h6>
+                          <div class="form-group form-group-default required ">
+                            <label>Clearance Name</label>
+                            <input type="text" name="clearname" [(ngModel)]="clearname" class="form-control" required>
+                          </div>
+                          <div class="form-group form-group-default required ">
+                            <label>Clearance Type</label>
+                            <select class="form-control" name="cleartype" [(ngModel)]="cleartype" required>
+                              <option value="employee">Employee</option>
+                              <option value="student">Student</option>
+                            </select>
+                          </div>
+                          <div class="form-group form-group-default required">
+                            <label>Description</label>
+                            <textarea rows="10" cols="10" class="form-control" placeholder="Required" name="description" [(ngModel)]="description" required></textarea>
+                          </div>
+                          <button [disabled]="clearForm.invalid" class="btn btn-complete btn-xs" id="save-btn"> SAVE</button>
+                        </form>
+                      </div>
+                      <div class="col-md-3 ">
+                        <h6>Signatories:</h6>
+                        <div class="sigContent ">
+                          <ul class="ul-toolbox ul-list" id="list-signatories" style="padding: 5px;">
+                            <li *ngFor="let signatory of items.signatories">
+                              <input type="hidden" name="signatory" value="{{signatory.sigId}}">
+                              <label class="label label-default label-lg">{{signatory.deptName}}</label>
+                            </li>
+                            <li id="NoSig" class="dropNoDisplay hide">
+                              No Signatory
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <h6>Priority:</h6>
+                        <form id="signaForm">
+                          <div class="sigContent">
+                            <ul class="ul-toolbox ul-list" id="list-priority" style="padding: 5px;">
+                              <li id="dropP" class="ui-state-highlight dropNoDisplay">
+                                Drop Signatory here.
+                              </li>
+                            </ul>
+                          </div>
+                        </form>
+                      </div>
+                    </ng-template>
+                  </div>
+                  <br>
+                </div>
+                <ng-template #elseContentShow>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="card card-transparent">
+                        <div class="card-header ">
+                          <div class="card-title bold">
+                            <h5>CLEARANCE INFO.</h5>
+                          </div>
+                        </div>
+                        <div class="card-block">
+                          <form #updateForm="ngForm" (ngSubmit)="onUpdateClearance(updateForm)">
+                            <span class="btn-update" *ngIf="!editModelShow">
+                              <button type="submit" [disabled]="updateForm.invalid" class="btn btn-warning">Update</button>
+                              <button type="button" (click)="onUpdateCancel()" class="btn btn-default">Cancel</button>
+                            </span>
+                            <div class="table-responsive" style="margin-top:-20px;">
+
+                              <table class="table table-condensed" id="condensedTable">
+                                <tbody>
+                                  <tr>
+                                    <td class="v-align-middle semi-bold">CLEARANCE NAME
+                                      <span class="pull-right">:</span>
+                                    </td>
+                                    <td class="v-align-middle bold uppercase">
+                                      <span *ngIf="editModelShow">{{clearance.clearance.clearName}}</span>
+                                      <input *ngIf="!editModelShow" type="text" class="form-control" name="clrName" [(ngModel)]="clearance.clearance.clearName"
+                                        required autocomplete="off">
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="v-align-mi ddle semi-bold">CLEARANCE TYPE
+                                      <span class="pull-right">:</span>
+                                    </td>
+                                    <td class="v-align-middle bold uppercase">
+                                      <span *ngIf="editModelShow">{{clearance.clearance.clearType}}</span>
+                                      <select *ngIf="!editModelShow" class="form-control capitalize" name="clrType" [(ngModel)]="clearance.clearance.clearType">
+                                        <option [value]="clearance.clearance.clearType">{{clearance.clearance.clearType}}</option>
+                                        <option [value]="'student'" *ngIf="clearance.clearance.clearType === 'employee'">
+                                          Student
+                                        </option>
+                                        <option [value]="'employee'" *ngIf="clearance.clearance.clearType !== 'employee'">
+                                          Employee
+                                        </option>
+                                      </select>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="v-align-middle semi-bold">STATUS
+                                      <span class="pull-right">:</span>
+                                    </td>
+                                    <td class="v-align-middle semi-bold">
+                                      <span *ngIf="editModelShow" class="label uppercase" [ngClass]="{
+                                        'label-success': clearance.clearance.clearStatus === 'active',
+                                        'label-danger': clearance.clearance.clearStatus !== 'active'
+                                    }">
+                                        {{clearance.clearance.clearStatus}} </span>
+                                      <input *ngIf="!editModelShow" type="text" class="form-control" name="clrStatus" [(ngModel)]="clearance.clearance.clearStatus"
+                                        readonly>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="v-align-middle semi-bold">DATE CREATED
+                                      <span class="pull-right">:</span>
+                                    </td>
+                                    <td class="v-align-middle bold">
+                                      <span *ngIf="editModelShow">{{clearance.clearance.clearDate | date}}</span>
+                                      <input *ngIf="!editModelShow" type="date" class="form-control" name="clrDate" value="{{clearance.clearance.clearDate}}" readonly>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="v-align-middle semi-bold">DESCRIPTION
+                                      <span class="pull-right">:</span>
+                                    </td>
+                                    <td class="v-align-middle semi-bold">
+                                      <span *ngIf="editModelShow">{{clearance.clearance.clearDescription}}</span>
+                                      <textarea class="form-control" *ngIf="!editModelShow" rows="10" name="clrDesc" [(ngModel)]="clearance.clearance.clearDescription"></textarea>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </form>
+                          <form id="signForm" *ngIf="signatoriesUpdateShow">
+                            <div class="signa-content">
+                              <div class="alert alert-warning" role="alert">
+                                <strong>Warning!</strong>
+                                <p>PLease Sort the signatories by priority. </p>
+                              </div>
+                              <ul class="list-group" id="signatoies-list">
+                                <li class="list-group-item  d-flex justify-content-between align-items-center" *ngFor="let signatory of clearance.signatories; let s = index ">
+                                  <strong class="uppercase">{{signatory.deptName}}</strong>
+                                  <a href="javascript:;" class="badge badge-danger badge-pill removeSignarory" [attr.id]="'sig-'+s" (click)="removeSignarory('sig-'+s)">
+                                    <i class="fa fa-times"></i>
+                                  </a>
+                                  <input type="hidden" name="sigNa" [value]="signatory.sigId">
+                                </li>
+                              </ul>
+                            </div>
+                          </form>
+                        </div>
+                        <span *ngIf="!signatoriesUpdateShow">
+                          <a href="javascript:;" *ngIf="signaShow; else elseSigna" (click)="onSignaShow('show')" title="Show Signatories?">
+                            <small style="font-size: 9px; "> SHOW SIGNA...</small>
+                          </a>
+                        </span>
+                      </div>
+                      <ng-template #elseSigna>
+                        <div class="card card-transparent" style="margin-top:-30px;">
+                          <div class="card-header ">
+                            <div class="card-title bold">
+                              <h5>
+                                SIGNATORIES
+                                <a href="javascript:;">
+                                  <small style="font-size: 9px; color : green" (click)="onSignaShow('hide')" title="Hide Signatories?">
+                                    Hide</small>
+                                </a>
+                              </h5>
+                            </div>
+                          </div>
+                          <div class="card-block">
+                            <div class="sm-m-l-5 sm-m-r-5" style="margin-top:-15px;">
+                              <div class="card-group horizontal" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="card card-default m-b-0" *ngFor="let signatory of clearance.signatories; let i = index">
+                                  <div class="card-header " role="tab" id="headingTwo">
+                                    <h4 class="card-title">
+                                      <a class="collapsed" data-toggle="collapse" data-parent="#accordion" [attr.href]="'#col'+i" aria-expanded="false" [attr.aria-controls]="'col'+i">
+                                        <strong>{{signatory.deptName}}</strong>
+                                        <br>
+                                        <small>{{signatory.signaName}}</small>
+                                      </a>
+                                    </h4>
+                                  </div>
+                                  <div [attr.id]="'col'+i" class="collapse" role="tabcard" aria-labelledby="headingTwo">
+                                    <div class="card-block">
+                                      <ng-container *ngIf="signatory.requirements !== null; else elseNoReq">
+                                        <ul class="pull-right ul-sig-crud">
+                                          <li>
+                                            <a href="javascript:;" title="Add Requirement">
+                                              <i class="fa fa-plus-square"></i>
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a href="javascript:;" title="Edit Requirement">
+                                              <i class="fa fa- fa-edit text-complete"></i>
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a href="javascript:;" title="Delete Requirement">
+                                              <i class="fa fa-trash text-danger"></i>
+                                            </a>
+                                          </li>
+                                        </ul>
+                                        <label style="margin-top:-25px; position: absolute; margin-left:10px;">Requirements
+                                          :
+                                        </label>
+                                        <ul>
+                                          <li *ngFor="let req of signatory.requirements">{{req.requireName}}</li>
+                                        </ul>
+                                      </ng-container>
+                                      <ng-template #elseNoReq>
+                                        <label style="margin-top:-25px; position: absolute; margin-left:10px;">
+                                          <i>No Requirements.</i>
+                                        </label>
+                                      </ng-template>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="btn-group btn-group-justified row w-100 " *ngIf="editModelShow">
+                        <div class="btn-group col-4 p-0">
+                          <button type="button" class="btn btn-default w-100" (click)="onBtnEdit()">
+                            <span class="p-t-5 p-b-5">
+                              <i class="fa fa-edit fs-15 text-complete"></i>
+                            </span>
+                            <br>
+                            <span class="fs-11 font-montserrat text-uppercase">EDIT</span>
+                          </button>
+                        </div>
+                        <div class="btn-group col-4 p-0">
+                          <button type="button" class="btn btn-default w-100" (click)="onDeleteClerance()">
+                            <span class="p-t-5 p-b-5">
+                              <i class="fa fa-trash-o fs-15 text-danger"></i>
+                            </span>
+                            <br>
+                            <span class="fs-11 font-montserrat text-uppercase">DELETE</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

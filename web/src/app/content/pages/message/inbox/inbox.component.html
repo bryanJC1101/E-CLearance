@@ -1,0 +1,133 @@
+<!-- <app-pages-loading *ngIf="pageShow; else elsePageShow"></app-pages-loading> -->
+<label class="label label-warning" id="loading-div" *ngIf="isPageShow; else elsePageShow">
+  Loading...
+</label>
+<ng-template #elsePageShow>
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-3 col-xs-3">
+      <app-msg-nav></app-msg-nav>
+    </div>
+    <div class="col-md-9 col-sm-9 col-xs-9">
+      <label class="label label-warning loading-msg" *ngIf="loadingShow">Loading...</label>
+      <div class="card card-default" style="margin-left: -14px !important; margin-top: -1px;">
+        <div class="card-header " *ngIf="tableShow">
+          <div class="card-title">INBOX</div>
+        </div>
+        <div class="card-block">
+          <div class="auto-overflow widget-11-2-table" *ngIf="tableShow ; else elseMsgContent">
+            <form id="deleteMsgForm">
+              <table class="table table-hover table-condensed " id="condensedTable">
+                <thead id="msgThead">
+                  <tr class="bg-master-light">
+                    <th colspan="3">
+                      <input type="checkbox" id="checkAll" (click)="checkAll()">&nbsp; &nbsp;
+                      <button id="btnDeleteMsg" (click)="onDeleteMessage()" class="btn btn-danger btn-xs" disabled>DELETE</button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="msgContent">
+                  <tr id="{{message.mesId}}" class="bg-master-light" *ngFor="let message of items?.message  | paginate: { itemsPerPage:8, currentPage: p } ">
+                    <td>
+                      <input type="checkbox" name="message" class="msgCheckbox" value="{{message.mesId}}" (click)="onSelectCheckBox(message.mesId, $event)"
+                        style="margin-top: 5px;">&nbsp;
+                      <a href="javascript:;" (click)="onSelectMsg(message.mesId)">
+                        <ng-container *ngIf="message.status == 'unread'; else elseUnread">
+                          <b>{{message.from}}</b>
+                        </ng-container>
+                        <ng-template #elseUnread>
+                          {{message.from}}
+                        </ng-template>
+                      </a>
+                    </td>
+                    <td class="v-align-middle semi-bold">{{message.message}}</td>
+                    <td class="v-align-middle semi-bold text-right">{{message.date | date : "M/d/yy"}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+            <div class="pull-right" style="margin:8px;">
+              <pagination-controls (pageChange)="p=$event"></pagination-controls>
+            </div>
+            <br>
+          </div>
+          <ng-template #elseMsgContent>
+            <div class="auto-overflow widget-11-2-table">
+              <button (click)="onDeleteMsg()" class="btn btn-white pull-right btn-xs text-danger" title="Delete Message">
+                <i class="fa fa-trash "></i> Delete
+              </button>
+              <button (click)="onBack()" class="btn btn-white pull-right btn-xs text-complete" title="Back" style="margin-right:5px;">
+                <i class="fa fa-reply "></i> Back
+              </button>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <img src="assets/images/no_image.png" alt="" width="60" class="media-object">
+                </li>
+                <li class="list-inline-item">
+                  <span id="header-content-msg">
+                    <strong class="uppercase">{{items.from}}</strong>
+                    <p>{{items.date | date }}</p>
+                  </span>
+                </li>
+              </ul>
+              <hr>
+              <p>{{items.message}}.</p>
+
+              <span [ngSwitch]="items.mesType">
+                <div *ngSwitchCase="0">
+                  <br>
+                  <a [routerLink]="['/' + userType + '/request']"> Goto Request Module.</a>
+                </div>
+                <div *ngSwitchCase="1">
+                  <br>
+                  <a [routerLink]="['/' + userType + '/requirements']"> Goto Requirements Module.</a>
+                </div>
+                <div *ngSwitchCase="2">
+                  <ng-container *ngIf="items.mesStatus === 'pending'; else elseMsgStat">
+                    --------------------------------------------------------
+                    <p>Click button to approve request.</p>
+                    <button class="btn btn-primary btn-xs w-10" (click)="OnApprovedRequest(items.empNo, items.requestId)" style="margin-top:10px;">
+                      Approved
+                    </button>
+                  </ng-container>
+                  <ng-template #elseMsgStat>
+                    <div class="alert alert-success" style="width: 50%;" role="alert">
+                      <strong>Info!</strong>
+                      <p> Youre Request is all ready Approved by the hr personnel.<br> Thank you.</p>
+                    </div>
+                  </ng-template>
+                </div>
+                <div *ngSwitchCase="3">
+                  Messages
+                </div>
+              </span>
+              <br>
+
+              <br>
+              <br>
+              <br>
+
+              <br> <small>Regards,</small>
+              <br> <small>HR Department,</small>
+              <br> <small>ACLC College Of Butuan</small>
+              <br>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

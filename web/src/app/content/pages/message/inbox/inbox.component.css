@@ -1,0 +1,53 @@
+.ul-table-delete li {
+    float: left;
+    list-style-type: none;
+}
+
+.ul-table-delete {
+    margin-top: 5px;
+}
+
+#label-msg-count {
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+#tbody-msg-nav tr td a {
+    cursor: pointer;
+}
+
+#msgContent tr {
+    border-right: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+}
+
+#msgThead tr {
+    border-right: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+}
+
+.row-active td {
+    background-color: gainsboro !important;
+}
+
+.loading-msg {
+    font-size: 13px;
+    margin-left: 40%;
+    z-index: 99;
+    margin-top: 10px;
+    position: absolute;
+}
+
+#header-content-msg {
+    position: absolute;
+    margin-top: -30px;
+}
+
+#mesDate {
+    /* margin-left: 60px; */
+    font-size: 12px;
+    /* position: absolute; */
+    /* margin-top: -20px; */
+    /* margin-top: -20px; */
+}

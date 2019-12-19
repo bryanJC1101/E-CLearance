@@ -1,0 +1,30 @@
+#table-requestor tr {
+  cursor: pointer;
+}
+
+#loading {
+  position: absolute;
+  margin-left: 43%;
+  font-size: 13px;
+  margin-top: -20px;
+  z-index: 99;
+}
+
+#alert-div {
+  border-radius: 0px;
+  border-left: 3px solid #5cb85c;
+  background-color: #f5f6f7;
+}
+
+.ul-req li {
+  list-style-type: none;
+}
+
+#table-header {
+  background-color: #ffffff;
+}
+
+#table-header th {
+  color: black;
+  font-weight: bold;
+}

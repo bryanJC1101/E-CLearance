@@ -1,0 +1,31 @@
+.ul-table-delete li {
+  float: left;
+  list-style-type: none;
+}
+.ul-table-delete {
+  margin-top: 5px;
+}
+#label-msg-count {
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+#tbody-msg-nav tr td a {
+  cursor: pointer;
+}
+#msgContent tr {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+}
+#msgThead tr {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+  border-top: 1px solid lightgray;
+}
+#loading-div {
+  margin-left: 50%;
+  font-size: 14px;
+}
+.row-active td {
+  background-color: gainsboro !important;
+}

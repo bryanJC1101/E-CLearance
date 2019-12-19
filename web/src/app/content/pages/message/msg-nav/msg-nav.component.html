@@ -1,0 +1,39 @@
+<div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch"
+  style="margin-left: 14px !important;">
+  <div class="card-header top-right">
+    <div class="card-controls">
+      <ul>
+        <li>
+          <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+            <i class="portlet-icon portlet-icon-refresh"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="padding-15">
+    <a [routerLink]="['/'+userType +'/messages/compose']" class="btn btn-complete btn-block">
+      COMPOSE
+    </a>
+    <div class="clearfix"></div>
+  </div>
+  <div class="auto-overflow widget-11-2-table">
+    <div class="list-group" id="tbody-msg-nav">
+      <a [routerLink]="['/'+userType +'/messages/inbox']" id="inbox" (click)="msgSelect('inbox')" class="list-group-item list-group-item-action">
+        <i class="fa fa-inbox"></i>&nbsp;Inbox &nbsp;
+        <span class="badge badge-danger" *ngIf="msgService.unreadMsg?.unread > 0">{{msgService.unreadMsg?.unread}}</span>
+      </a>
+      <a [routerLink]="['/'+userType + '/messages/sent']" id="sent" (click)="msgSelect('sent')" class="list-group-item list-group-item-action">
+        <i class="fa fa-envelope"></i>&nbsp;Sent
+      </a>
+    </div>
+  </div>
+  <div class="padding-25 mt-auto">
+    <p class="small no-margin">
+      <a href="#">
+        <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+      </a>
+      <span class="hint-text ">Show more details of E-Clearance . Inc</span>
+    </p>
+  </div>
+</div>

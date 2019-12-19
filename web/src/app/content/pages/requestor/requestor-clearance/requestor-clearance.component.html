@@ -1,0 +1,348 @@
+<app-requestor-content-loading *ngIf="pageShow; else elseContent"></app-requestor-content-loading>
+
+<ng-template #elseContent>
+  <!-- start print div here -->
+  <div class="hide" id="print-certification">
+    <table width="100%">
+      <tr>
+        <td>
+          <strong style="font-size:20px; font-family: times new roman; margin-left:10px;">ACLC COLLEGE OF BUTUAN </strong>
+          <p style="font-size:10px; margin-left:10px;;">
+            Franchised and Operated by Butuan Information Technology Services Inc.<br> HDS Bldg. 999 JC Aquino Avenue Butuan
+            City.
+          </p>
+        </td>
+        <td>
+          <img src="/assets/images/logo/AMA_logo.png" width="100px;" style="margin-right : 2px; right: 0;">
+        </td>
+      </tr>
+    </table>
+    <br>
+    <br>
+    <span style="font-family:'Times New Roman', Times, serif">
+      <h2 style="text-align: center;"> CERTICATE</h2>
+    </span>
+    <br><br>
+    <p style="font-size:16px; text-align: justify;">
+      This is to certify that Mr/Ms. <strong> <u>{{ credentials.employee?.fullname }}</u> </strong> from {{credentials.employee?.department}}
+      Department. <br>He has been cleared from all Accountabilities With Butuan Information Technology Service Inc. (BITSI).
+      <br> This Certification is being Issued for Documentation purposes.
+      <br>
+    </p>
+    <br>
+    <br>
+    <strong>Ms. {{credentials.hrEmployee?.fullname}}</strong>
+    <p> {{credentials.hrEmployee?.position}} <br> {{credentials.hrEmployee?.department}}</p>
+  </div>
+  <!-- end print div here -->
+
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch">
+        <div class="card-header top-right">
+          <div class="card-controls">
+            <ul>
+              <li>
+                <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+                  <i class="portlet-icon portlet-icon-refresh"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="padding-15">
+          <div class="pull-left">
+            <h5 class="text-success no-margin">
+              <i class="fs-14 fa fa-rss"></i>
+              Request
+            </h5>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="input-group transparent">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" placeholder="Search Request" class="form-control" [(ngModel)]="searchReq">
+        </div>
+        <div class="auto-overflow widget-11-2-table">
+          <table class="table table-condensed table-hover" id="table-requests">
+            <tbody>
+              <tr id="{{request.requestId}}" (click)="onGetRequest(request.requestId)" *ngFor="let request of requests | filter:searchReq">
+                <td class="font-montserrat all-caps fs-12 w-50">
+                  {{request.reqName}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="padding-25 mt-auto">
+          <p class="small no-margin">
+            <a href="javascript:;">
+              <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+            </a>
+            <span class="hint-text ">Show more details of E-Clearance . Inc</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 ">
+      <div class="row">
+        <div class="col-md-12 ">
+          <app-alert-div></app-alert-div>
+        </div>
+        <div class="col-md-12 ">
+          <label class="label label-warning" id="loading" *ngIf="loadingShow">Loading...</label>
+
+          <div class="card card-transparent" *ngIf="clearanceShow; else elseClearShow">
+            <div class="card-block no-padding">
+              <div id="card-advance" class="card card-default">
+                <div class="card-header  ">
+                  <div class="card-title">
+                    REQUEST CONTENT &nbsp;
+                  </div>
+                </div>
+                <div class="card-block" *ngIf="contentShow; else elseContentShow">
+                  <div class="alert alert-white" role="alert" id="alert-div">
+                    <p>
+                      <strong>Info!</strong>
+                    </p>
+                    <p class="mb-0">You can file online clearances by clicking th button bellow.</p>
+                  </div>
+                  <button class="btn btn-complete" (click)="btnOnline()">
+                    <i class="pg-sent"></i>
+                    Online Clearance
+                  </button>
+                </div>
+                <ng-template #elseContentShow>
+                  <div class="card-block">
+                    <form #requestForm="ngForm" (ngSubmit)="onRequestForm(requestForm)">
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="alert alert-info" role="alert">
+                            <strong>Info!</strong>
+                            <p>Create Request here.</p>
+                          </div>
+                          <div class="form-group form-group-default required ">
+                            <label>Request Type</label>
+                            <select class="form-control" name="cleartype" ngModel required>
+                              <option value="" disabled> Choose Clearance</option>
+                              <option [value]="clearance.clearId" *ngFor="let clearance of clearances">
+                                {{clearance.clearName}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-7 well">
+                          <div id="term">
+                            <h5>
+                              <strong>Terms & Conditions</strong>
+                            </h5>
+                            <p style="text-align: justify;">
+                              &nbsp;&nbsp;&nbsp;Help protect your website and its users with clear and fair website terms and conditions. These terms and
+                              conditions for a website set out key issues such as acceptable use, privacy, cookies, registration
+                              and passwords, intellectual property, links to other sites, termination and disclaimers of
+                              responsibility.
+                              <br>
+                              <br> &nbsp;&nbsp;&nbsp;Terms and conditions are used and necessary to protect a website owner
+                              from liability of a user relying on the information or the goods provided from the site then
+                              suffering a loss. Making your own terms and conditions for your website is hard, not impossible,
+                              to do. It can take a few hours to few days for a person with no legal background to make. But
+                              worry no more; we are here to help you out. All you need to do is fill up the blank spaces
+                              and then you will receive an email with your personalized terms and conditions.
+                              <br>
+                              <br> &nbsp;&nbsp;&nbsp;Also looking for a disclaimer?
+                              <br>
+                              <br> &nbsp;&nbsp;&nbsp;Check out disclaimertemplate.net.
+                            </p>
+                            <br>
+                            <div class="checkbox check-success">
+                              <input type="checkbox" name="terms" ngModel id="checkbox1" required>
+                              <label for="checkbox1">Accept Terms & Conditionss</label>
+                            </div>
+                            <p class="pull-right">
+                              <button type="submit" [disabled]="requestForm.invalid" class="btn btn-primary btn-sm">Save</button>
+                              <button type="button" class="btn btn-default btn-sm" (click)="onCancel()">Cancel</button>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                </ng-template>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #elseClearShow>
+            <div class="card card-transparent">
+              <div class="card-block no-padding">
+                <div id="card-advance" class="card card-default">
+                  <div class="card-header  ">
+                    <div class="card-title">
+                      REQUEST CONTENT &nbsp;
+                      <a href="javascript:;" title="Back" id="cv-clearance" (click)="onBack()" class=" btn btn-default btn-xs btn-rounded">
+                        <i class="fa fa-arrow-circle-left text-danger"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-block">
+                    <ng-container *ngIf="credentials.status === 'pending'; else elseRequest">
+                      <div class="alert alert-white border-left no-border" role="alert" id="alert-div">
+                        <strong>Warning!</strong>
+                        <p>
+                          Your Request is <strong class="text-danger"><i>PENDING</i></strong>
+                          please wait for the HR Response.
+                          <a href="javascript:;" (click)="onNotify()" title="Show Request Deatails">
+                            <i class="fa fa-send-o"></i>
+                            Notify
+                          </a>
+                        </p>
+                      </div>
+                    </ng-container>
+                    <ng-template #elseRequest>
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12" id="content" style="border-right:1px solid #f5f6f7">
+                          <strong>
+                            EMPLOYEE INFORMATION :
+                            <label class="label label-success" *ngIf="credentials?.clearanceStatus !== null">
+                              CLEARED
+                              <i class="fa fa-check"></i>
+                            </label>
+                            <a href="javascript:;" id="btn-print" *ngIf="credentials?.clearanceStatus !== null" title="Print Certificate." (click)="onPrintCertificate()">
+                              <i class="pg-printer text-complete"></i>
+                            </a>
+                          </strong>
+                          <table class="table table-condensed">
+                            <tr>
+                              <td style="width:20%">Name <span class="pull-right">:</span></td>
+                              <td style="width:35%">{{credentials?.employee.fullname}}</td>
+                              <td>Date <span class="pull-right">:</span></td>
+                              <td>{{credentials?.request.requestDate | date}}</td>
+                            </tr>
+                            <tr>
+                              <td>Department <span class="pull-right">:</span></td>
+                              <td>{{credentials?.employee.department}}</td>
+                              <td>Employe No. <span class="pull-right">:</span></td>
+                              <td>{{credentials?.employee.empId}}</td>
+                            </tr>
+                            <tr>
+                              <td>Date Hired <span class="pull-right">:</span></td>
+                              <td>{{credentials?.employee.dateHired | date}}</td>
+                              <td>Date End. <span class="pull-right">:</span></td>
+                              <td>
+                                <ng-container *ngIf="credentials?.clearanceStatus; else elseDateStat">
+                                  {{credentials?.clearanceStatus.reqStatDate | date}}
+                                </ng-container>
+                                <ng-template #elseDateStat>
+                                  ----
+                                </ng-template>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Address. <span class="pull-right">:</span></td>
+                              <td>{{credentials?.employee.address}}</td>
+                              <td>Contact No. <span class="pull-right">:</span></td>
+                              <td>{{credentials?.employee.phone}}</td>
+                            </tr>
+                          </table>
+                          <br><br>
+                          <strong>
+                            CLEARANCE INFORMATION & STATUS
+                          </strong>
+                          <table class="table table-condensed table-bordered table-active">
+                            <thead>
+                              <tr>
+                                <th style="width:35%; font-size:12px;" class="bold text-black">DEPARTMENT</th>
+                                <th style="width:30% ; font-size:12px;" class="bold text-black">SIGNATORY</th>
+                                <th style="width:18% ; font-size:12px;" class="bold text-black">DATE</th>
+                                <th style="text-align: center">
+                                  <small class="text-black">
+                                    act./status
+                                  </small>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let signatory of credentials.signatories">
+                                <td>
+                                  <strong> {{signatory.deptName}}</strong>
+                                  <ul class="ul-req">
+                                    <li *ngFor="let req of signatory.requirements">
+                                      <small class="text-default">
+                                        <i class="fa fa-check"></i>
+                                        {{req.requireName}}
+                                      </small>
+                                    </li>
+                                  </ul>
+                                </td>
+                                <td>{{signatory.signaName}}</td>
+                                <td>
+                                  <span *ngIf="signatory.signaStat.clearedDate !== null; else elseStatDate">
+                                    {{signatory.signaStat.clearedDate | date}}
+                                  </span>
+                                  <ng-template #elseStatDate>
+                                    ---
+                                  </ng-template>
+                                </td>
+                                <td style="text-align:center">
+                                  <p class="m-t-10" *ngIf="signatory.signaStat.status === 'pending'; else elseStatusTemp">
+                                    <label class="label label-danger capitalize">{{signatory.signaStat.status}}</label>
+                                    <a href="javascript:;" class="text-complete send-noti-icon" (click)="onSendNotify(signatory.employeeId)" title="Send Notification.">
+                                      <i class="fa fa-send"></i>
+                                    </a>
+                                  </p>
+                                  <ng-template #elseStatusTemp>
+                                    <label class="label label-success label-sm capitalize">
+                                      {{signatory.signaStat.status}}
+                                    </label>
+                                  </ng-template>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <br>
+                        </div>
+                        <!-- <div class="col-xs-2  col-sm-2 col-md-2">
+                          <ul class="ul-print-list" *ngIf="credentials?.clearanceStatus !== null">
+                            <li>
+                              <a href="javascript:;" title="Print Certificate." (click)="onPrintCertificate()">
+                                <i class="pg-printer"></i>
+                              </a>
+                            </li>
+                            <li>
+                              <a href="javascript:;" (click)="onDownloadPDF()" title="Download PDF">
+                                <i class="fa fa-download" style="font-size:29px;"></i>
+                              </a>
+                            </li>
+                          </ul>
+                        </div> -->
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

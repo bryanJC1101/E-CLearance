@@ -1,0 +1,17 @@
+#table-requestor tr {
+  cursor: pointer;
+}
+
+#loading {
+  position: absolute;
+  z-index: 99;
+  margin-left: 40%;
+  margin-top: -20px;
+  font-size: 14px;
+}
+
+#alert-div {
+  border-radius: 0px;
+  border-left: 3px solid #5cb85c;
+  background-color: #f5f6f7;
+}

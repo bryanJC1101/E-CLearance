@@ -1,0 +1,231 @@
+<app-admin-content-loading *ngIf="contentShow; else elseContent">
+</app-admin-content-loading>
+<ng-template #elseContent>
+
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-3 ">
+      <div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch">
+        <div class="card-header top-right">
+          <div class="card-controls">
+            <ul>
+              <li>
+                <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+                  <i class="portlet-icon portlet-icon-refresh"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="padding-15">
+          <div class="pull-left">
+            <h5 class="text-success no-margin">
+              <i class="fa fa-users"></i> Signatories
+            </h5>
+            <p class="no-margin">Signatories Created & Updated.</p>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="input-group transparent">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" placeholder="Search Signatory" class="form-control" [(ngModel)]="searchSigna">
+        </div>
+        <div class="auto-overflow widget-11-2-table">
+          <table class="table table-condensed table-hover" id="table-sinatories">
+            <tbody>
+              <tr id="{{signatory.sigId}}" (click)="onSelectSignatory(signatory.sigId)" *ngFor="let signatory of items | filter:searchSigna">
+                <td class="font-montserrat  fs-12 w-50">
+                  <strong>{{signatory.deptName}}</strong>
+                  <p>
+                    <small>{{signatory.empName}}</small>
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="padding-25 mt-auto">
+          <p class="small no-margin">
+            <a href="#">
+              <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+            </a>
+            <span class="hint-text ">Show more details of E-Clearance . Inc</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9 ">
+      <div class="row">
+        <div class="col-md-12 ">
+          <app-admin-content-header></app-admin-content-header>
+        </div>
+        <div class="col-md-12 ">
+
+          <span class="label label-warning" id="loading" *ngIf="loadingShow">Loading...</span>
+
+          <div class="card card-transparent">
+            <div class="card-block no-padding">
+              <div id="card-advance" class="card card-default" *ngIf="keyShow; else keyContent">
+                <div class="card-header  ">
+                  <div class="card-title">
+                    <strong>Signatory Content &nbsp;
+                      <a href="javascrip:;" (click)="onBtnNew()" *ngIf="formShow" title="New Signatory">
+                        <i class="fa fa-user-plus fa-2x"></i>
+                      </a>
+                    </strong>
+                  </div>
+                </div>
+                <div class="card-block">
+                  <div class="row">
+                    <div class="col-md-8" *ngIf="formShow; else elseFormContent">
+                      <div class="alert alert-white" role="alert" id="alert-div">
+                        <p>
+                          <strong>Info!</strong>
+                        </p>
+                        <p class="mb-0">Create <strong>
+                            <i> SIGNATORY</i>
+                          </strong> by clicking the signatory button.</p>
+                      </div>
+                    </div>
+                    <ng-template #elseFormContent>
+                      <div class="col-md-6">
+                        <form id="formSigna" role="form" #formSigna="ngForm" (ngSubmit)="onSaveSignatory(formSigna)">
+                          <div class="form-group">
+                            <label>Department Name
+                              <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control combobox department" name="department" ngModel required>
+                            </select>
+                          </div>
+                          <div class="form-group ">
+                            <label>Employee Name
+                              <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control combobox employee" name="employee" ngModel required>
+                            </select>
+                          </div>
+                          <div class="form-group  ">
+                            <label>Desciption
+                              <span class="text-danger">*</span>
+                            </label>
+                            <textarea name="description" style="height: 100px;" ngModel rows="4" class="form-control" placeholder="Text here"></textarea>
+                          </div>
+                          <p style="margin-top:20px;">
+                            <button class="btn btn-complete btn-cons">
+                              Create Signatory
+                            </button>
+                            <button (click)="onCancelSignatory()" class="btn btn-white  ">
+                              Cancel
+                            </button>
+                          </p>
+                        </form>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              <ng-template #keyContent>
+                <div id="card-advance" class="card card-default">
+                  <div class="card-header  ">
+                    <div class="card-title">
+                      <strong>Signatory Content </strong> &nbsp;
+                      <a href="javascript:;" class="text-danger" (click)="onBack()" title="Back?">
+                        <i class="fa fa-arrow-circle-left text-complete fa-2x"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-block">
+                    <div class="row">
+                      <div class="col-md-8">
+
+                        <p class="btn-func" *ngIf="updateFormShow">
+                          <button type="button" (click)="onBtnEdit()" class="btn btn-white btn-sm" title="Edit Signatory?">
+                            <i class="fa fa-edit text-complete"></i>
+                          </button>
+                          <button type="button" (click)="onDeleteSigna()" title="Delete Signatory?" class="btn btn-white btn-sm">
+                            <i class="fa fa-trash-o text-danger"></i>
+                          </button>
+                        </p>
+                        <form #formUpdate="ngForm" (ngSubmit)="onUpdateSignatory(formUpdate)" id="form-update-signatory">
+                          <br>
+                          <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-3 col-form-label">
+                              Department
+                              <span *ngIf="updateFormShow" class="pull-right">:</span>
+                              <span *ngIf="!updateFormShow" class="text-danger">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                              <strong *ngIf="updateFormShow">{{signatories?.signatory.deptName}}</strong>
+                              <select *ngIf="!updateFormShow" class="form-control combobox department" name="department" [(ngModel)]="signatories?.signatory.deptId"
+                                required>
+                                <option [value]="signatories?.signatory.deptId">{{signatories?.signatory.deptName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">
+                              Signatory
+                              <span *ngIf="updateFormShow" class="pull-right">:</span>
+                              <span *ngIf="!updateFormShow" class="text-danger">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                              <strong *ngIf="updateFormShow">{{signatories?.signatory.signaName}}</strong>
+                              <select *ngIf="!updateFormShow" class="form-control combobox employee" name="employee" [(ngModel)]="signatories?.signatory.empId"
+                                required>
+                                <option [value]="signatories?.signatory.empId">{{signatories?.signatory.signaName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">
+                              Description
+                              <span *ngIf="updateFormShow" class="pull-right">:</span>
+                              <span *ngIf="!updateFormShow" class="text-danger">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                              <p *ngIf="updateFormShow">{{signatories?.signatory.discription}}</p>
+                              <textarea name="description" ngModel *ngIf="!updateFormShow" [(ngModel)]="signatories?.signatory.discription" rows="4" class="form-control"></textarea>
+                            </div>
+                          </div>
+                          <div class="form-group row" *ngIf="!updateFormShow" style="margin-top:20px;">
+                            <label class="col-sm-3 col-form-label"> &nbsp;</label>
+                            <div class="col-sm-6">
+                              <button type="submit" class="btn btn-warning btn-sm"> Update</button>
+                              <button type="button" class="btn btn-default btn-sm"> Cancel</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- <app-pages-loading></app-pages-loading> -->
+
+  </div>
+</ng-template>

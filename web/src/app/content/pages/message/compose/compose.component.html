@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-3 col-sm-3 col-xs-3">
+    <app-msg-nav></app-msg-nav>
+  </div>
+  <div class="col-md-9 col-sm-9 col-xs-9">
+    <div class="card card-default">
+
+      <div class="card-header" *ngIf="isContentShow; else contentShow">
+        <div class="card-title">
+          Loading...
+        </div>
+      </div>
+
+      <ng-template #contentShow>
+
+        <div class="card-header ">
+          <div class="card-title">
+            COMPOSE
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-8">
+              <form role="form" #composeForm="ngForm" (ngSubmit)="onSendMsg(composeForm)">
+                <div class="form-group">
+                  <label>TO <span class="text-danger">*</span></label>
+                  <span class="help">e.g. "Search Employee Name"</span>
+                  <select class="form-control combobox employee" ngModel name="employee"></select>
+                  <span class="text-danger" *ngIf="isErrorField">This field is Required</span>
+                </div>
+                <div class="form-group">
+                  <label>Subject <span class="text-danger">*</span></label>
+                  <span class="help">e.g. "Name to display a Message"</span>
+                  <input type="text" class="form-control" name="subject" ngModel required autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label>Message <span class="text-danger">*</span></label>
+                  <textarea rows="10" name="message" ngModel class="form-control" required style="height: 100px;" placeholder="Message here"></textarea>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-danger" [disabled]="composeForm.invalid">Send</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+</div>

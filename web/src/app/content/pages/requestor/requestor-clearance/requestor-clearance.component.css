@@ -1,0 +1,61 @@
+#alert-div {
+  border-radius: 0px;
+  border-left: 3px solid #5cb85c;
+  background-color: #f5f6f7;
+}
+
+#term {
+  padding: 10px;
+}
+
+#table-requests tr {
+  cursor: pointer;
+}
+
+#loading {
+  position: absolute;
+  margin-left: 43%;
+  font-size: 13px;
+  margin-top: -20px;
+  z-index: 99;
+}
+
+.ul-print-list {
+  margin-left: -42px;
+}
+
+.ul-print-list li {
+  float: left;
+  list-style-type: none;
+  margin-right: 10px;
+}
+
+.ul-print-list li a {
+  font-size: 25px;
+}
+
+.ul-req li {
+  list-style-type: none;
+  margin-bottom: -5px;
+}
+
+.ul-req {
+  margin-left: -40px;
+}
+
+.send-noti-icon {
+  margin-top: -10px;
+  margin-left: 5px;
+  position: absolute;
+}
+
+#btn-print {
+  position: absolute;
+  margin-left: 7px;
+  margin-top: -10px;
+  z-index: 9999;
+}
+
+#btn-print i {
+  font-size: 20px;
+}

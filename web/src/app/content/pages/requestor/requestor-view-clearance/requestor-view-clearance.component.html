@@ -1,0 +1,75 @@
+<div class="spinners" *ngIf="pageShow; else elseContent">
+  <div class="rect1"></div>
+  <div class="rect2"></div>
+  <div class="rect3"></div>
+  <div class="rect4"></div>
+  <div class="rect5"></div>
+</div>
+<ng-template #elseContent>
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch">
+        <div class="card-header top-right">
+          <div class="card-controls">
+            <ul>
+              <li>
+                <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+                  <i class="portlet-icon portlet-icon-refresh"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="padding-15">
+          <div class="pull-left">
+            <h5 class="text-success no-margin">
+              <i class="fs-14 fa fa-rss"></i>
+              Request
+            </h5>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="input-group transparent">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" placeholder="Search Clearance" class="form-control" [(ngModel)]="search">
+        </div>
+        <div class="auto-overflow widget-11-2-table">
+          <table class="table table-condensed table-hover" id="table-clearance">
+            <tbody>
+              <tr id="{{request.requestId}}" (click)="onGetRequest(request.requestId)" *ngFor="let request of requests | filter:search">
+                <td class="font-montserrat all-caps fs-12 w-50">
+                  {{request.reqName}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="padding-25 mt-auto">
+          <p class="small no-margin">
+            <a href="javascript:;">
+              <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+            </a>
+            <span class="hint-text ">Show more details of APPLE . INC</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

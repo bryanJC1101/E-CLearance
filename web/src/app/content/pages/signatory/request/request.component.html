@@ -1,0 +1,270 @@
+<app-signatory-content-loading *ngIf="isPageShow; else elseContent"></app-signatory-content-loading>
+
+<ng-template #elseContent>
+
+  <div class="pgn-wrapper" *ngIf="alertShow" data-position="top" style="top: 95px;">
+    <div class="pgn push-on-sidebar-open pgn-bar">
+      <div class="alert alert-{{alertType}}">
+        <div class="container">
+          <i class="fa fa-{{alertIcon}}"></i>
+          <span>{{alertMessage}}</span>
+          <button type="button" class="close" (click)="alertClose()">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="widget-11-2 card no-border card-condensed no-margin widget-loader-circle d-flex flex-column align-self-stretch">
+        <div class="card-header top-right">
+          <div class="card-controls">
+            <ul>
+              <li>
+                <a data-toggle="refresh" class="portlet-refresh text-black" href="#">
+                  <i class="portlet-icon portlet-icon-refresh"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="padding-15">
+          <div class="pull-left">
+            <h5 class="text-success no-margin">
+              <i class="fa fa-tasks"></i>
+              REQUEST
+            </h5>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="input-group transparent">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" placeholder="Search Requestor" class="form-control" [(ngModel)]="searchClear">
+        </div>
+        <div class="auto-overflow widget-11-2-table">
+          <table class="table table-condensed table-hover" id="table-requestor">
+            <tbody>
+              <tr [attr.id]="requestor.reqDetId" (click)="onGetRequestor(requestor.reqDetId, requestor.requestId)" *ngFor="let requestor of requestors | filter:searchClear">
+                <td>
+                  <strong>{{requestor.employee}}</strong>
+                  <p>
+                    <small>{{requestor.clearance}}</small>
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="padding-25 mt-auto">
+          <p class="small no-margin">
+            <a href="#">
+              <i class="fa fs-16 fa-arrow-circle-o-down text-success m-r-10"></i>
+            </a>
+            <span class="hint-text ">Show more details of E-Clearance . Inc</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 ">
+      <div class="row">
+        <div class="col-md-12 ">
+          <app-signatory-content-header></app-signatory-content-header>
+        </div>
+        <div class="col-md-12 ">
+
+          <span class="label label-warning" id="loading" *ngIf="isLoading">Loading...</span>
+
+          <div class="card card-default">
+            <div class="card-header ">
+              <div class="card-title">
+                REQUEST CONTENT
+              </div>
+            </div>
+            <div class="card-block">
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="alert alert-white" role="alert" id="alert-div" *ngIf="isContentShow; else contentShow">
+                    <p>
+                      <strong>Info!</strong>
+                    </p>
+                    <p class="mb-0">View <strong>
+                        <i>Requestor Request</i>
+                      </strong> by clicking the request list.</p>
+                  </div>
+                </div>
+                <ng-template #contentShow>
+                  <div class="col-md-9">
+                    <h6>
+                      INFORMATION:
+                    </h6>
+                    <a href="javascript:;" data-target="#modalFillIn" data-toggle="modal" class="pull-right" style="margin-top:-30px;" title="View Clearance?">
+                      <i class="fa fa-files-o fa-2x"></i>
+                    </a>
+                    <form class="" role="form" #formRequst="ngForm" (ngSubmit)="onSubmitHold(formRequst)">
+                      <div class="form-group form-group-default">
+                        <label>CLEARANCE NAME:</label>
+                        {{clearance.clearance.clearName}}
+                      </div>
+
+                      <div class="form-group form-group-default ">
+                        <label>PERMISSION REQUEST:</label>
+                        Clearance Completion
+                      </div>
+
+                      <div class="form-group form-group-default" *ngIf="clrStatus == 'cleared'; else btnShow">
+                        <label>Status:</label>
+                        <span class="text-success">Cleared <i class="fa fa-check"></i></span>
+                      </div>
+
+                      <ng-template #btnShow>
+                        <div class="form-group" style="margin-top:15px;" *ngIf="isFormShow; else elseFormShow">
+                          <button type="button" id="btnCleared" class="btn btn-complete btn-xs" (click)="onClearedRequest(clearance.employee.empId)">Cleared</button>
+                          <button type="button" class="btn btn-warning btn-xs" (click)="onHold()">Hold</button>
+                        </div>
+
+                        <ng-template #elseFormShow>
+                          <div class="form-group form-group-default required">
+                            <label>Reason</label>
+                            <input type="hidden" name="empId" [(ngModel)]="clearance.employee.empId">
+                            <textarea name="reason" [(ngModel)]="reason" class="form-control" style="height: 80px;" required></textarea>
+                          </div>
+                          <div class="form-group" style="margin-top:15px;">
+                            <button type="submit" [disabled]="formRequst.invalid" class="btn btn-warning btn-xs">
+                              &nbsp; Hold &nbsp;
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" (click)="onCancel()">Cancel</button>
+                          </div>
+                        </ng-template>
+                      </ng-template>
+                    </form>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade fill-in" data-backdrop="static" id="modalFillIn" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="width: 100%">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card card-transparent">
+                        <div class="card-block">
+                          <div id="card-advance" class="card card-default">
+                            <div class="card-header  ">
+                              <button title="Close Clearance Modal" class="btn btn-white btn-xs  btn-sm pull-right close" aria-hidden="true" data-dismiss="modal"
+                                aria-hidden="true">
+                                <i class="fa fa-times text-danger"></i>
+                              </button>
+                              <div class="card-title">Clearance Content</div>
+                              <div class="card-controls"></div>
+                            </div>
+                            <div class="card-block">
+                              <div class="table-responsive">
+                                <strong>EMPLOYEE INFORMATION</strong>
+                                <table class="table table-bordered table-condensed" id="condensedTable">
+                                  <tbody>
+                                    <tr>
+                                      <td style="width:20%">Name <span class="pull-right">:</span></td>
+                                      <td style="width:35%">{{clearance.employee?.fullname}}</td>
+                                      <td>Date <span class="pull-right">:</span></td>
+                                      <td>{{clearance.request?.requestDate | date}}</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Department <span class="pull-right">:</span></td>
+                                      <td>{{clearance.employee?.department}}</td>
+                                      <td>Employe No. <span class="pull-right">:</span></td>
+                                      <td>{{clearance.employee?.empId}}</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Date Hired <span class="pull-right">:</span></td>
+                                      <td>{{clearance.employee?.dateHired | date}}</td>
+                                      <td>Date End. <span class="pull-right">:</span></td>
+                                      <td>
+                                        <ng-container *ngIf="clearance?.clearanceStatus; else elseDateStat">
+                                          {{clearance.clearanceStatus?.reqStatDate | date}}
+                                        </ng-container>
+                                        <ng-template #elseDateStat>
+                                          ----
+                                        </ng-template>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Address. <span class="pull-right">:</span></td>
+                                      <td>{{clearance.employee?.address}}</td>
+                                      <td>Contact No. <span class="pull-right">:</span></td>
+                                      <td>{{clearance.employee?.phone}}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <br>
+                                <strong>CLEARANCE INFORMATION & STATUS</strong>
+                                <table class="table table-condensed table-bordered table-active">
+                                  <thead>
+                                    <tr>
+                                      <th style="width:35%; font-size:12px;" class="bold text-black">DEPARTMENT</th>
+                                      <th style="width:30% ; font-size:12px;" class="bold text-black">SIGNATORY</th>
+                                      <th style="width:18% ; font-size:12px;" class="bold text-black">DATE</th>
+                                      <th style="text-align: center">
+                                        <small class="text-black">
+                                          act./status
+                                        </small>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let signatory of clearance.signatories">
+                                      <td>
+                                        <strong> {{signatory.deptName}}</strong>
+                                        <ul class="ul-req">
+                                          <li *ngFor="let req of signatory.requirements">
+                                            <small class="text-complete">
+                                              <i class="fa fa-check"></i>
+                                              {{req.requireName}}
+                                            </small>
+                                          </li>
+                                        </ul>
+                                      </td>
+                                      <td>{{signatory.signaName}}</td>
+                                      <td>
+                                        <span *ngIf="signatory.signaStat.clearedDate !== null; else elseStatDate">
+                                          {{signatory.signaStat.clearedDate | date}}
+                                        </span>
+                                        <ng-template #elseStatDate>
+                                          ---
+                                        </ng-template>
+                                      </td>
+                                      <td style="text-align:center">
+                                        <p class="m-t-10" *ngIf="signatory.signaStat.status === 'pending'; else elseStatusTemp">
+                                          <label class="label label-danger capitalize">{{signatory.signaStat.status}}</label>
+                                        </p>
+                                        <ng-template #elseStatusTemp>
+                                          <label class="label label-success label-sm capitalize">
+                                            {{signatory.signaStat.status}}
+                                          </label>
+                                        </ng-template>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
