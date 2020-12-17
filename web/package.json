@@ -27,7 +27,7 @@
     "angular5-data-table": "^0.5.1",
     "angular5-toaster": "^1.0.2",
     "core-js": "^2.4.1",
-    "datatables.net": "^1.10.16",
+    "datatables.net": "^1.10.22",
     "datatables.net-dt": "^1.10.16",
     "jquery": "^3.3.1",
     "jspdf": "^1.4.1",
